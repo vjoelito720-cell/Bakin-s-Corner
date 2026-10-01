@@ -1,683 +1,273 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Baking's Corner</title>
-  <style>
-    :root {
-      --primary-orange: #f38230;
-      --secondary-orange: #fba967;
-      --light-bg: #fffbf2;
-      --card-bg: #ffedd8;
-      --purple-yape: #732a96;
-      --text-dark: #2c2c2c;
-      --sidebar-width: 220px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bakin's Corner</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: #f8f9fa; color: var(--text-dark); display: flex; flex-direction: column; min-height: 100vh; }
+        body {
+            background-color: #fff8f6;
+            color: #4a3e3d;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-    /* --- HEADER --- */
-    header {
-      background-color: var(--primary-orange);
-      color: white;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    .brand-title { font-size: 1.4rem; font-weight: bold; font-style: italic; }
-    .brand-sub { font-size: 0.8rem; opacity: 0.9; }
-    .search-bar { flex-grow: 1; max-width: 400px; margin: 0 20px; }
-    .search-bar input { width: 100%; padding: 8px 15px; border-radius: 20px; border: none; outline: none; }
-    .user-actions { display: flex; align-items: center; gap: 15px; }
-    .coins-badge { background: rgba(255,255,255,0.25); padding: 5px 12px; border-radius: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+        header {
+            background-color: #d87093;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
 
-    /* --- LAYOUT --- */
-    .container { display: flex; flex: 1; }
-    aside {
-      width: var(--sidebar-width);
-      background-color: var(--secondary-orange);
-      padding: 20px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .nav-btn {
-      background: none; border: none; text-align: left; padding: 12px; color: white;
-      font-weight: bold; font-size: 1rem; cursor: pointer; border-radius: 8px; display: flex; align-items: center; gap: 10px;
-      transition: background 0.2s;
-    }
-    .nav-btn:hover, .nav-btn.active { background: rgba(255,255,255,0.25); }
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.3rem;
+        }
 
-    main { flex: 1; padding: 25px; background: white; overflow-y: auto; }
+        .container {
+            max-width: 700px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex: 1;
+        }
 
-    /* --- CARDS & GRID --- */
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; margin-top: 15px; }
-    .card { border: 1px solid #f0d0b0; border-radius: 12px; padding: 15px; background: var(--light-bg); display: flex; flex-direction: column; gap: 10px; }
-    .card-img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; cursor: pointer; }
+        .post-form {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            border: 1px solid #f3d5d8;
+        }
 
-    /* --- BOTONES Y COMPONENTES --- */
-    .btn { padding: 8px 16px; background: var(--primary-orange); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: opacity 0.2s; }
-    .btn:hover { opacity: 0.9; }
-    .btn-secondary { background: #6c757d; }
-    .btn-danger { background: #d9534f; }
-    .btn-follow { background: #ffe28a; color: #5a4000; }
-    
-    .input-field { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-top: 5px; outline: none; }
+        .post-form h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #b04369;
+        }
 
-    /* --- VISTA DETALLE DE PUBLICACIÓN --- */
-    .post-detail-container { display: flex; flex-wrap: wrap; gap: 20px; }
-    .post-carousel { flex: 1; min-width: 300px; position: relative; background: #000; border-radius: 10px; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 350px; }
-    .post-carousel img { max-width: 100%; max-height: 100%; object-fit: contain; }
-    .like-btn-floating { position: absolute; bottom: 15px; right: 15px; background: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); font-size: 1.2rem; }
-    .post-info-panel { flex: 1; min-width: 300px; background: var(--card-bg); padding: 20px; border-radius: 12px; display: flex; flex-direction: column; gap: 15px; }
+        .form-group {
+            margin-bottom: 1rem;
+        }
 
-    /* --- MODAL Y FLOTANTES --- */
-    .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000;
-    }
-    .modal-content { background: #ffedd8; padding: 25px; border-radius: 15px; max-width: 550px; width: 90%; max-height: 85vh; overflow-y: auto; border: 2px solid var(--primary-orange); }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #e0c8ce;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+        }
 
-    /* --- RESPONSIVO (CELULARES) --- */
-    @media (max-width: 768px) {
-      .container { flex-direction: column; }
-      aside { width: 100%; flex-direction: row; overflow-x: auto; padding: 10px; }
-      .nav-btn { font-size: 0.85rem; padding: 8px; white-space: nowrap; }
-      header { flex-wrap: wrap; gap: 10px; }
-      .search-bar { order: 3; max-width: 100%; margin: 0; }
-    }
-  </style>
+        input[type="text"]:focus, textarea:focus {
+            border-color: #d87093;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        button {
+            background-color: #d87093;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: #b04369;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .feed-header {
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            color: #b04369;
+            border-bottom: 2px solid #f3d5d8;
+            padding-bottom: 0.5rem;
+        }
+
+        .posts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .post-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+            border: 1px solid #f3d5d8;
+        }
+
+        .post-author {
+            font-weight: bold;
+            color: #b04369;
+            margin-bottom: 0.2rem;
+        }
+
+        .post-date {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 0.8rem;
+        }
+
+        .post-content {
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .loading-text {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- ENCABEZADO PRINCIPAL -->
-  <header>
-    <div>
-      <div class="brand-title">Baking's Corner</div>
-      <div class="brand-sub">De la imagen hasta el gusto</div>
-    </div>
-    <div class="search-bar">
-      <input type="text" id="search-input" placeholder="Buscar..." onkeyup="filterPosts()">
-    </div>
-    <div class="user-actions">
-      <div class="coins-badge" onclick="showView('buy-coins')">
-        🍒 <span id="user-coins">100</span>
-      </div>
-      <div style="cursor: pointer; font-weight: bold;" onclick="showView('profile')">👤 <span id="user-display-name">Mi Cuenta</span></div>
-      <div style="cursor: pointer;" onclick="showView('notifications')">🔔</div>
-    </div>
-  </header>
+    <header>
+        <h1>🧁 Bakin's Corner</h1>
+        <p>El espacio para compartir tus mejores recetas y bocaditos</p>
+    </header>
 
-  <!-- CONTENEDOR DE LA APLICACIÓN -->
-  <div class="container">
-    <aside>
-      <button class="nav-btn" onclick="showView('feed')">🏠 Inicio</button>
-      <button class="nav-btn" onclick="showLoadingThen('studio')">📚 Publicaciones</button>
-      <button class="nav-btn" onclick="showView('following')">👥 Siguiendo</button>
-      <button class="nav-btn" onclick="showView('accessories')">🍒 Accesorios</button>
-      <button class="nav-btn" onclick="showView('donations')">🪙 Donaciones</button>
-      <button class="nav-btn" onclick="showView('profile')">⚙️ Configuración</button>
-    </aside>
-
-    <main id="main-content">
-      <!-- Vistas dinámicas cargadas mediante JS -->
-    </main>
-  </div>
-
-  <!-- MODAL OBLIGATORIO DE TÉRMINOS Y CONDICIONES -->
-  <div class="modal-overlay" id="terms-modal">
-    <div class="modal-content">
-      <h2 style="color: #7a3e00; margin-bottom: 10px;">Términos y Condiciones:</h2>
-      <p style="font-size: 0.95rem; line-height: 1.4; color: #4a2c00;">
-        Esta página web es para todo el público que le interese la repostería, igualmente para las pequeñas micro empresas y/o empresas grandes que quieran promocionar sus tortas o cualquier tipo de postre que prefiera. Igualmente tú como usuario podrás ver la torta que más le llame su atención. Aunque hay ciertas reglas que deben cumplir para poder mantener una comunidad sana:
-      </p>
-      <ul style="margin: 15px 0 15px 20px; font-size: 0.9rem; color: #4a2c00;">
-        <li>Publicar contenido que NO sea el tema de repostería será borrado.</li>
-        <li>No comentar algún tipo de insulto, pues este será censurado.</li>
-        <li>No publicar ningún contenido +18, gore, abuso, maltrato, o contenido illegal. Será sancionado.</li>
-        <li>Cualquier tipo de estafa será sancionado.</li>
-        <li>Cualquier cosa que pase fuera de la plataforma no tendremos responsabilidad alguna.</li>
-      </ul>
-      <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-weight: bold; cursor: pointer;">
-        <input type="checkbox" id="accept-terms-check" style="width: 18px; height: 18px;"> Eh leído todo y acepto
-      </label>
-      <button class="btn" style="width: 100%;" onclick="confirmTerms()">Aceptar y Continuar</button>
-    </div>
-  </div>
-
-  <script>
-    // --- BINDING CON JSONBIN.IO ---
-    const BIN_ID = '6abc2742ac6210605a033ec9';
-    const API_KEY = '$2a$10$EZegfcF8evF0w6cehg3y0uNYw5UmgiTp9/efv6fsRNHpHt6bnAke6';
-
-    // --- ESTADO DEL USUARIO ACTUAL (CARGADO DESDE LOCALSTORAGE) ---
-    let currentUser = JSON.parse(localStorage.getItem('bakings_user_data')) || {
-      username: 'Usuario_' + Math.floor(1000 + Math.random() * 9000),
-      fullName: '',
-      url: '',
-      description: '',
-      profilePic: '',
-      coverPic: '',
-      coins: 100,
-      accessory: null,
-      following: [],
-      likedPosts: [],
-      reportedPosts: [],
-      reportedUsers: []
-    };
-
-    let globalPosts = [];
-
-    // --- GUARDAR ESTADO LOCAL DEL USUARIO ---
-    function saveUserData() {
-      localStorage.setItem('bakings_user_data', JSON.stringify(currentUser));
-      document.getElementById('user-coins').innerText = currentUser.coins;
-      document.getElementById('user-display-name').innerText = currentUser.username;
-    }
-
-    // --- INICIALIZACIÓN ---
-    window.onload = async () => {
-      saveUserData();
-      checkTerms();
-      await fetchPosts();
-      showView('feed');
-    };
-
-    function checkTerms() {
-      if (!localStorage.getItem('bakings_terms_accepted')) {
-        document.getElementById('terms-modal').style.display = 'flex';
-      }
-    }
-
-    function confirmTerms() {
-      if (document.getElementById('accept-terms-check').checked) {
-        localStorage.setItem('bakings_terms_accepted', 'true');
-        document.getElementById('terms-modal').style.display = 'none';
-      } else {
-        alert('Debes marcar la casilla para poder aceptar los términos y condiciones.');
-      }
-    }
-
-    // --- SINCRONIZACIÓN API ---
-    async function fetchPosts() {
-      try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-          headers: { 'X-Master-Key': API_KEY }
-        });
-        const data = await res.json();
-        globalPosts = data.record.posts || [];
-      } catch (err) {
-        console.error('Error al descargar publicaciones:', err);
-      }
-    }
-
-    async function savePosts() {
-      try {
-        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': API_KEY
-          },
-          body: JSON.stringify({ posts: globalPosts })
-        });
-      } catch (err) {
-        console.error('Error al guardar en tiempo real:', err);
-      }
-    }
-
-    // --- PANTALLA DE CARGA TEMPORAL ---
-    function showLoadingThen(viewName) {
-      const main = document.getElementById('main-content');
-      main.innerHTML = `
-        <div style="text-align: center; padding: 60px 20px;">
-          <div style="font-size: 3.5rem; margin-bottom: 10px;">🍰🎬</div>
-          <h2 style="color: var(--primary-orange);">Bienvenido a Baking's Estudios</h2>
-          <p style="color: #666; margin-top: 5px;">Cargando tu panel de creación...</p>
-        </div>`;
-      setTimeout(() => showView(viewName), 1200);
-    }
-
-    // --- ENRUTADOR DE VISTAS ---
-    async function showView(view, param = null) {
-      const main = document.getElementById('main-content');
-      if (view === 'feed') {
-        await fetchPosts(); // Actualizar al volver al inicio
-        renderFeed(main);
-      }
-      else if (view === 'post-detail') renderPostDetail(main, param);
-      else if (view === 'user-profile') renderUserProfile(main, param);
-      else if (view === 'studio') renderStudio(main);
-      else if (view === 'profile') renderMyProfile(main);
-      else if (view === 'buy-coins') renderBuyCoins(main);
-      else if (view === 'yape-pay') renderYapePay(main);
-      else if (view === 'accessories') renderAccessories(main);
-      else if (view === 'donations') renderDonations(main);
-      else if (view === 'following') renderFollowing(main);
-      else if (view === 'notifications') main.innerHTML = '<h2>Notificaciones</h2><p style="margin-top:10px;">No tienes notificaciones pendientes.</p>';
-    }
-
-    // --- VISTA 1: FEED DE PUBLICACIONES (INICIO) ---
-    function renderFeed(container) {
-      let html = `
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <h2>Tendencias</h2>
-          <select style="padding:6px; border-radius:6px;"><option>Ordenar por fecha</option></select>
-        </div>
-        <div class="grid" id="posts-grid">`;
-
-      if (globalPosts.length === 0) {
-        html += `<p style="grid-column: 1/-1; padding: 20px;">No hay publicaciones disponibles. ¡Sé el primero en publicar en Baking's Estudios!</p>`;
-      } else {
-        globalPosts.forEach(post => {
-          html += `
-            <div class="card">
-              <img src="${post.images && post.images.length > 0 ? post.images[0] : 'https://via.placeholder.com/300x180?text=Reposteria'}" class="card-img" onclick="showView('post-detail', '${post.id}')">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <strong style="cursor:pointer;" onclick="showView('post-detail', '${post.id}')">${post.title}</strong>
-                <span style="cursor:pointer;" onclick="showView('user-profile', '${post.author}')">👤 ${post.author}</span>
-              </div>
-            </div>`;
-        });
-      }
-
-      html += '</div>';
-      container.innerHTML = html;
-    }
-
-    // --- VISTA 2: DETALLE DE PUBLICACIÓN CON LIKES, DONACIONES Y DENUNCIAS ---
-    function renderPostDetail(container, postId) {
-      const post = globalPosts.find(p => p.id === postId);
-      if (!post) return showView('feed');
-
-      container.innerHTML = `
-        <h2>${post.title}</h2>
-        <hr style="margin: 10px 0;">
-        <div class="post-detail-container">
-          <div class="post-carousel">
-            <img id="carousel-img" src="${post.images && post.images.length > 0 ? post.images[0] : 'https://via.placeholder.com/400x300?text=Reposteria'}">
-            <div class="like-btn-floating" onclick="toggleLike('${post.id}')">
-              ${currentUser.likedPosts.includes(post.id) ? '❤️' : '🤍'}
+    <div class="container">
+        <!-- Formulario de Publicación -->
+        <div class="post-form">
+            <h2>Crear nueva publicación</h2>
+            <div class="form-group">
+                <input type="text" id="authorInput" placeholder="Tu nombre o usuario">
             </div>
-          </div>
-          <div class="post-info-panel">
-            <textarea readonly style="width:100%; height:120px; border:none; background:transparent; resize:none; outline:none;" placeholder="Descripción...">${post.description}</textarea>
-            
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; background:#fbe3c7; padding:10px; border-radius:10px;">
-              <div style="display:flex; align-items:center; gap:8px; cursor:pointer;" onclick="showView('user-profile', '${post.author}')">
-                <span style="font-size:1.5rem;">👤</span>
-                <div>
-                  <strong>${post.author}</strong><br>
-                  <small style="color:#666;">Creador</small>
-                </div>
-              </div>
-              <button class="btn btn-follow" onclick="toggleFollow('${post.author}')">${currentUser.following.includes(post.author) ? 'Siguiendo' : 'Seguir'}</button>
+            <div class="form-group">
+                <textarea id="contentInput" placeholder="Escribe tu receta o publicación aquí..."></textarea>
             </div>
-
-            <!-- DONACIÓN DE CEREZAS COINS -->
-            <div style="display:flex; gap:8px; align-items:center;">
-              <span>🍒</span>
-              <input type="number" id="donate-coins-input" value="10" min="1" style="width:70px; padding:6px; border-radius:6px; border:1px solid #ccc;">
-              <button class="btn" onclick="donateCoinsToPost('${post.author}')">✈️ Donar</button>
-              <button class="btn btn-danger" style="margin-left:auto;" onclick="reportPost('${post.id}')">Reportar</button>
-            </div>
-          </div>
+            <button id="publishBtn" onclick="crearPublicacion()">Publicar</button>
         </div>
 
-        <!-- SECCIÓN DE COMENTARIOS -->
-        <div style="margin-top:20px; background:#ffedd8; padding:15px; border-radius:10px;">
-          <h3>Comentarios:</h3>
-          <div id="comments-list" style="margin: 10px 0; max-height:150px; overflow-y:auto;">
-            ${(post.comments || []).map(c => `<p style="margin-bottom:5px;"><strong>${c.user}:</strong>${c.text}</p>`).join('')}
-          </div>
-          <div style="display:flex; gap:10px; margin-top:10px;">
-            <input type="text" id="comment-input" class="input-field" placeholder="Escribe un comentario..." style="margin:0;">
-            <button class="btn" onclick="addComment('${post.id}')">✈️</button>
-          </div>
+        <!-- Feed Principal -->
+        <h2 class="feed-header">Publicaciones Recientes</h2>
+        <div id="postsContainer" class="posts-container">
+            <p class="loading-text">Cargando publicaciones...</p>
         </div>
-      `;
-    }
+    </div>
 
-    // --- REGLAS DE NEGOCIO: LIKES, DONACIONES Y DENUNCIAS EN POSTS ---
-    async function toggleLike(postId) {
-      if (currentUser.likedPosts.includes(postId)) {
-        return alert('Solo se permite 1 me gusta por usuario en cada publicación.');
-      }
-      const post = globalPosts.find(p => p.id === postId);
-      post.likes = (post.likes || 0) + 1;
-      currentUser.likedPosts.push(postId);
-      saveUserData();
-      await savePosts();
-      renderPostDetail(document.getElementById('main-content'), postId);
-    }
+    <script>
+        // Configuración con tus credenciales de JSONBin
+        const BIN_ID = '6abc2742ac6210605a033ec9';
+        const API_KEY = '$2a$10$EZegfcF8evF0w6cehg3y0uNYw5UmgiTp9/efv6fsrNHpHt6bnAke6';
+        const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-    async function reportPost(postId) {
-      if (currentUser.reportedPosts.includes(postId)) {
-        return alert('Ya has denunciado esta publicación anteriormente.');
-      }
-      const post = globalPosts.find(p => p.id === postId);
-      post.reports = (post.reports || 0) + 1;
-      currentUser.reportedPosts.push(postId);
-      saveUserData();
+        // Cargar posts al entrar a la página
+        document.addEventListener('DOMContentLoaded', cargarPublicaciones);
 
-      // Regla de eliminación automática a las 15 denuncias
-      if (post.reports >= 15) {
-        globalPosts = globalPosts.filter(p => p.id !== postId);
-        await savePosts();
-        alert('Esta publicación ha sido eliminada automáticamente al recibir 15 denuncias comunitarias.');
-        showView('feed');
-      } else {
-        await savePosts();
-        alert(`Publicación denunciada. Acumula ${post.reports}/15 denuncias.`);
-      }
-    }
+        async function cargarPublicaciones() {
+            const container = document.getElementById('postsContainer');
+            try {
+                const response = await fetch(`${API_URL}/latest`, {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                const data = await response.json();
+                const posts = data.record.posts || [];
 
-    function donateCoinsToPost(author) {
-      const amount = parseInt(document.getElementById('donate-coins-input').value) || 0;
-      if (amount <= 0) return alert('Ingresa una cantidad válida.');
-      if (currentUser.coins < amount) return alert('Saldo insuficiente de Cerezas Coins.');
-      
-      currentUser.coins -= amount;
-      saveUserData();
-      alert(`¡Has donado ${amount} Cerezas Coins a ${author}!`);
-    }
+                if (posts.length === 0) {
+                    container.innerHTML = '<p class="loading-text">No hay publicaciones aún. ¡Sé el primero!</p>';
+                    return;
+                }
 
-    async function addComment(postId) {
-      const input = document.getElementById('comment-input');
-      if (!input.value.trim()) return;
-      const post = globalPosts.find(p => p.id === postId);
-      if (!post.comments) post.comments = [];
-      post.comments.push({ user: currentUser.username, text: input.value.trim() });
-      await savePosts();
-      renderPostDetail(document.getElementById('main-content'), postId);
-    }
-
-    // --- VISTA 3: PERFIL PÚBLICO DEL CREADOR ---
-    function renderUserProfile(container, targetUsername) {
-      const userPosts = globalPosts.filter(p => p.author === targetUsername);
-      container.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <h2>Perfil de ${targetUsername}</h2>
-          <button class="btn btn-danger" onclick="reportUser('${targetUsername}')">🚩 Reportar Perfil</button>
-        </div>
-        <div style="background:#ffedd8; padding:15px; border-radius:10px; margin:15px 0; display:flex; gap:15px; align-items:center;">
-          <div style="font-size:3rem;">👤</div>
-          <div>
-            <h3>${targetUsername}</h3>
-            <p>Seguidores: ${targetUsername === currentUser.username ? 10 : 1} | Publicaciones: ${userPosts.length}</p>
-          </div>
-          <button class="btn btn-follow" style="margin-left:auto;" onclick="toggleFollow('${targetUsername}')">
-            ${currentUser.following.includes(targetUsername) ? 'Siguiendo' : 'Seguir'}
-          </button>
-        </div>
-        <h3>Publicaciones del creador</h3>
-        <div class="grid">
-          ${userPosts.map(p => `
-            <div class="card" onclick="showView('post-detail', '${p.id}')">
-              <img src="${p.images && p.images.length > 0 ? p.images[0] : 'https://via.placeholder.com/300x180'}" class="card-img">
-              <strong>${p.title}</strong>
-            </div>
-          `).join('')}
-        </div>
-      `;
-    }
-
-    function reportUser(username) {
-      if (currentUser.reportedUsers.includes(username)) {
-        return alert('Solo puedes denunciar un perfil 1 sola vez.');
-      }
-      currentUser.reportedUsers.push(username);
-      saveUserData();
-      alert(`El perfil de ${username} ha sido denunciado.`);
-    }
-
-    function toggleFollow(username) {
-      if (currentUser.following.includes(username)) {
-        currentUser.following = currentUser.following.filter(u => u !== username);
-      } else {
-        currentUser.following.push(username);
-      }
-      saveUserData();
-      showView('user-profile', username);
-    }
-
-    // --- VISTA 4: BAKING'S ESTUDIOS (CREACIÓN Y EDICIÓN DE IMÁGENES BASE64) ---
-    function renderStudio(container) {
-      container.innerHTML = `
-        <h2>Baking's Estudios</h2>
-        <p style="margin-bottom:15px; color:#666;">Crea y publica tu contenido gastronómico y de repostería.</p>
-        <div class="card" style="max-width:550px;">
-          <h3>Editar / Nueva publicación</h3>
-          <input type="text" id="studio-title" class="input-field" placeholder="Agrega un título a tu receta...">
-          <textarea id="studio-desc" class="input-field" style="height:100px;" placeholder="Agrega una descripción e ingredientes..."></textarea>
-          <input type="file" id="studio-files" multiple accept="image/*" class="input-field">
-          
-          <h4 style="margin-top:10px;">Opciones avanzadas</h4>
-          <label style="font-size:0.85rem;"><input type="checkbox"> Desactivar comentarios</label>
-          <label style="font-size:0.85rem;"><input type="checkbox"> Ocultar recuento de me gusta</label>
-
-          <button class="btn" style="margin-top:15px;" onclick="publishFromStudio()">Guardar y publicar</button>
-        </div>
-      `;
-    }
-
-    // Convertir imágenes subidas por el usuario a Base64 para que todos puedan verlas desde JSONBin
-    function fileToBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-      });
-    }
-
-    async function publishFromStudio() {
-      const title = document.getElementById('studio-title').value.trim();
-      const desc = document.getElementById('studio-desc').value.trim();
-      const fileInput = document.getElementById('studio-files');
-
-      if (!title) return alert('El título es obligatorio.');
-
-      let imageUrls = [];
-      if (fileInput.files && fileInput.files.length > 0) {
-        for (let i = 0; i < fileInput.files.length; i++) {
-          try {
-            const b64 = await fileToBase64(fileInput.files[i]);
-            imageUrls.push(b64);
-          } catch(e) {
-            console.error("Error convirtiendo imagen", e);
-          }
+                container.innerHTML = posts.reverse().map(post => `
+                    <div class="post-card">
+                        <div class="post-author">${escaparHTML(post.author)}</div>
+                        <div class="post-date">${post.date}</div>
+                        <div class="post-content">${escaparHTML(post.content)}</div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = '<p class="loading-text">Error al cargar publicaciones.</p>';
+            }
         }
-      } 
-      
-      if (imageUrls.length === 0) {
-        imageUrls.push('https://via.placeholder.com/400x300?text=Reposteria');
-      }
 
-      const newPost = {
-        id: 'post_' + Date.now(),
-        title: title,
-        description: desc,
-        images: imageUrls,
-        author: currentUser.username,
-        likes: 0,
-        reports: 0,
-        comments: []
-      };
+        async function crearPublicacion() {
+            const author = document.getElementById('authorInput').value.trim();
+            const content = document.getElementById('contentInput').value.trim();
+            const btn = document.getElementById('publishBtn');
 
-      globalPosts.unshift(newPost);
-      await savePosts();
-      alert('¡Publicación guardada exitosamente!');
-      showView('feed');
-    }
+            if (!author || !content) {
+                alert('Por favor completa todos los campos.');
+                return;
+            }
 
-    // --- VISTA 5: MI CUENTA / CONFIGURACIÓN DE USUARIO ---
-    function renderMyProfile(container) {
-      container.innerHTML = `
-        <h2>Configuración de la Cuenta</h2>
-        <div class="card" style="max-width:500px; margin-top:15px;">
-          <!-- Previsualizaciones de Portada y Perfil -->
-          <div style="position:relative; width:100%; height:120px; background:#e2d2c0; border-radius:8px; overflow:hidden; background-size:cover; background-position:center; ${currentUser.coverPic ? `background-image:url('${currentUser.coverPic}')` : ''}">
-            <div style="position:absolute; bottom:10px; left:10px; width:60px; height:60px; border-radius:50%; border:2px solid white; background:#fff; overflow:hidden; display:flex; align-items:center; justify-content:center;">
-              ${currentUser.profilePic ? `<img src="${currentUser.profilePic}" style="width:100%; height:100%; object-fit:cover;">` : '<span style="font-size:2rem;">👤</span>'}
-            </div>
-          </div>
+            btn.disabled = true;
+            btn.innerText = 'Publicando...';
 
-          <label style="margin-top:10px; display:block; font-weight:bold;">Foto de Perfil:</label>
-          <input type="file" id="prof-pic-file" accept="image/*" class="input-field">
+            try {
+                // 1. Obtener datos actuales del Bin
+                const getRes = await fetch(`${API_URL}/latest`, {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                const getData = await getRes.json();
+                const currentPosts = getData.record.posts || [];
 
-          <label style="margin-top:10px; display:block; font-weight:bold;">Foto de Portada:</label>
-          <input type="file" id="cover-pic-file" accept="image/*" class="input-field">
+                // 2. Crear nueva publicación
+                const newPost = {
+                    id: Date.now(),
+                    author: author,
+                    content: content,
+                    date: new Date().toLocaleString()
+                };
 
-          <label style="margin-top:10px; display:block; font-weight:bold;">Nombre completo:</label>
-          <input type="text" id="prof-fullname" class="input-field" value="${currentUser.fullName}" placeholder="Tu nombre">
-          
-          <label style="margin-top:10px; display:block; font-weight:bold;">Nombre de usuario:</label>
-          <input type="text" id="prof-username" class="input-field" value="${currentUser.username}">
-          
-          <label style="margin-top:10px; display:block; font-weight:bold;">URL / Sitio Web:</label>
-          <input type="text" id="prof-url" class="input-field" value="${currentUser.url}" placeholder="https://tu-pagina.com">
-          
-          <label style="margin-top:10px; display:block; font-weight:bold;">Descripción:</label>
-          <textarea id="prof-desc" class="input-field" style="height:80px;">${currentUser.description}</textarea>
-          
-          <button class="btn" style="margin-top:15px;" onclick="saveMyProfile()">Guardar Cambios</button>
+                currentPosts.push(newPost);
 
-          <!-- SECCIÓN INGRESAR CÓDIGO PROMOCIONAL -->
-          <hr style="margin:20px 0; border:0; border-top:1px dashed #d0b090;">
-          <h3 style="font-size:1rem; color:var(--primary-orange);">Ingresar código promocional</h3>
-          <div style="display:flex; gap:8px; margin-top:8px;">
-            <input type="text" id="promo-code-input" class="input-field" placeholder="Ingresa tu código aquí..." style="margin:0;">
-            <button class="btn" style="white-space:nowrap;" onclick="claimPromoCode()">Canjear</button>
-          </div>
-        </div>
-      `;
-    }
+                // 3. Guardar en JSONBin
+                await fetch(API_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify({ posts: currentPosts })
+                });
 
-    async function saveMyProfile() {
-      const profFileInput = document.getElementById('prof-pic-file');
-      const coverFileInput = document.getElementById('cover-pic-file');
+                // Limpiar campos y refrescar
+                document.getElementById('authorInput').value = '';
+                document.getElementById('contentInput').value = '';
+                await cargarPublicaciones();
 
-      if (profFileInput.files && profFileInput.files[0]) {
-        currentUser.profilePic = await fileToBase64(profFileInput.files[0]);
-      }
-      if (coverFileInput.files && coverFileInput.files[0]) {
-        currentUser.coverPic = await fileToBase64(coverFileInput.files[0]);
-      }
+            } catch (error) {
+                console.error(error);
+                alert('Ocurrió un error al guardar la publicación.');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Publicar';
+            }
+        }
 
-      currentUser.fullName = document.getElementById('prof-fullname').value;
-      currentUser.username = document.getElementById('prof-username').value;
-      currentUser.url = document.getElementById('prof-url').value;
-      currentUser.description = document.getElementById('prof-desc').value;
-      
-      saveUserData();
-      alert('Perfil actualizado correctamente.');
-      renderMyProfile(document.getElementById('main-content'));
-    }
-
-    // --- FUNCIÓN CANJEAR CÓDIGO PROMOCIONAL ---
-    function claimPromoCode() {
-      const codeInput = document.getElementById('promo-code-input').value.trim().toLowerCase().replace(/\s+/g, '');
-      
-      if (codeInput === 'valenciab8rda') {
-        currentUser.coins += 1000;
-        saveUserData();
-        alert('¡Código canjeado con éxito! Se han añadido 1000 Cereza Coins a tu cuenta. 🍒');
-        document.getElementById('promo-code-input').value = '';
-      } else {
-        alert('El código introducido no es válido.');
-      }
-    }
-
-    // --- VISTA 6: COMPRA DE CEREZAS COINS Y PASARELA YAPE ---
-    function renderBuyCoins(container) {
-      container.innerHTML = `
-        <h2>Comprar cerezas coins</h2>
-        <div class="grid">
-          <div class="card" style="text-align:center;"><h3>100 Cerezas coins</h3><p>S/. 5.00</p><button class="btn" onclick="showView('yape-pay')">Comprar</button></div>
-          <div class="card" style="text-align:center;"><h3>200 Cerezas coins</h3><p>S/. 10.00</p><button class="btn" onclick="showView('yape-pay')">Comprar</button></div>
-          <div class="card" style="text-align:center;"><h3>400 Cerezas coins</h3><p>S/. 20.00</p><button class="btn" onclick="showView('yape-pay')">Comprar</button></div>
-          <div class="card" style="text-align:center;"><h3>600 Cerezas coins</h3><p>S/. 40.00</p><button class="btn" onclick="showView('yape-pay')">Comprar</button></div>
-        </div>
-      `;
-    }
-
-    function renderYapePay(container) {
-      container.innerHTML = `
-        <h2>Comprar cereza coins</h2>
-        <div style="display:flex; flex-wrap:wrap; gap:20px; margin-top:15px;">
-          <div style="text-align:center; background:white; padding:20px; border-radius:12px; border:1px solid #ccc;">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=YAPE_BAKINGS_CORNER" style="margin-bottom:10px;">
-            <div style="background:var(--purple-yape); color:white; padding:8px 15px; border-radius:20px; font-weight:bold;">
-              922409554
-            </div>
-          </div>
-          <div style="flex:1; min-width:280px; background:var(--purple-yape); color:white; padding:25px; border-radius:15px;">
-            <h2>¡Importante!</h2>
-            <p style="margin-top:15px; line-height:1.5;">
-              Al momento de realizar el pago debe de poner en la descripción el nombre de su cuenta o usuario de <strong>Baking's Corner</strong> antes de depositar. Cualquier reclamo en el número de soporte.
-            </p>
-          </div>
-        </div>
-      `;
-    }
-
-    // --- VISTA 7: ACCESORIOS Y DONACIONES GENERALES ---
-    function renderAccessories(container) {
-      container.innerHTML = `
-        <h2>Accesorios de Perfil</h2>
-        <div class="grid">
-          <div class="card" style="text-align:center;"><h3>Modo pan</h3><p>150 🍒</p><button class="btn" onclick="buyAcc(150, 'Modo pan')">Comprar</button></div>
-          <div class="card" style="text-align:center;"><h3>Cup cake</h3><p>220 🍒</p><button class="btn" onclick="buyAcc(220, 'Cup cake')">Comprar</button></div>
-          <div class="card" style="text-align:center;"><h3>Cereza</h3><p>280 🍒</p><button class="btn" onclick="buyAcc(280, 'Cereza')">Comprar</button></div>
-        </div>
-      `;
-    }
-
-    function buyAcc(cost, name) {
-      if (currentUser.coins < cost) return alert('Saldo insuficiente de cerezas coins.');
-      currentUser.coins -= cost;
-      currentUser.accessory = name;
-      saveUserData();
-      alert(`¡Accesorio ${name} comprado e instalado!`);
-    }
-
-    function renderDonations(container) {
-      container.innerHTML = `
-        <h2>DONACIONES</h2>
-        <div class="card" style="max-width:550px;">
-          <p>¿Deseas apoyar al mantenimiento de la plataforma Baking's Corner?</p>
-          <div style="background:var(--purple-yape); color:white; padding:15px; border-radius:10px; margin-top:15px; text-align:center; font-weight:bold;">
-            Paga aquí con Yape: 922409554
-          </div>
-        </div>
-      `;
-    }
-
-    function renderFollowing(container) {
-      container.innerHTML = `
-        <h2>Creadores que sigues</h2>
-        <ul style="margin-top:15px; padding-left:20px;">
-          ${currentUser.following.length === 0 ? '<p>No sigues a ningún creador aún.</p>' : currentUser.following.map(u => `<li style="margin-bottom:8px; cursor:pointer;" onclick="showView('user-profile', '${u}')">👤 ${u}</li>`).join('')}
-        </ul>
-      `;
-    }
-
-    function filterPosts() {
-      const q = document.getElementById('search-input').value.toLowerCase();
-      const cards = document.querySelectorAll('#posts-grid .card');
-      cards.forEach(c => {
-        const text = c.innerText.toLowerCase();
-        c.style.display = text.includes(q) ? 'flex' : 'none';
-      });
-    }
-  </script>
+        function escaparHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+    </script>
 </body>
 </html>
