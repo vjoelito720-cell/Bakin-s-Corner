@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Baking's Corner</title>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     :root {
       --primary-orange: #f38230;
@@ -108,22 +110,22 @@
     </div>
     <div class="user-actions">
       <div class="coins-badge" onclick="showView('buy-coins')">
-        🍒 <span id="user-coins">100</span>
+        <i class="fa-solid fa-apple-whole" style="color: #ff4d4d;"></i> <span id="user-coins">100</span>
       </div>
-      <div style="cursor: pointer; font-weight: bold;" onclick="showView('profile')">👤 <span id="user-display-name">Mi Cuenta</span></div>
-      <div style="cursor: pointer;" onclick="showView('notifications')">🔔</div>
+      <div style="cursor: pointer; font-weight: bold;" onclick="showView('profile')"><i class="fa-solid fa-circle-user"></i> <span id="user-display-name">Mi Cuenta</span></div>
+      <div style="cursor: pointer;" onclick="showView('notifications')"><i class="fa-solid fa-bell"></i></div>
     </div>
   </header>
 
   <!-- CONTENEDOR DE LA APLICACIÓN -->
   <div class="container">
     <aside>
-      <button class="nav-btn" onclick="showView('feed')">🏠 Inicio</button>
-      <button class="nav-btn" onclick="showView('studio')">📚 Publicaciones</button>
-      <button class="nav-btn" onclick="showView('following')">👥 Siguiendo</button>
-      <button class="nav-btn" onclick="showView('accessories')">🍒 Accesorios</button>
-      <button class="nav-btn" onclick="showView('donations')">🪙 Donaciones</button>
-      <button class="nav-btn" onclick="showView('profile')">⚙️ Configuración</button>
+      <button class="nav-btn" onclick="showView('feed')"><i class="fa-solid fa-house"></i> Inicio</button>
+      <button class="nav-btn" onclick="showView('studio')"><i class="fa-solid fa-book-open"></i> Publicaciones</button>
+      <button class="nav-btn" onclick="showView('following')"><i class="fa-solid fa-user-group"></i> Siguiendo</button>
+      <button class="nav-btn" onclick="showView('accessories')"><i class="fa-solid fa-gem"></i> Accesorios</button>
+      <button class="nav-btn" onclick="showView('donations')"><i class="fa-solid fa-coins"></i> Donaciones</button>
+      <button class="nav-btn" onclick="showView('profile')"><i class="fa-solid fa-gear"></i> Configuración</button>
     </aside>
 
     <main id="main-content">
@@ -291,7 +293,7 @@
               <img src="${post.images && post.images.length > 0 ? post.images[0] : 'https://via.placeholder.com/300x180?text=Reposteria'}" class="card-img" onclick="showView('post-detail', '${post.id}')">
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <strong style="cursor:pointer;" onclick="showView('post-detail', '${post.id}')">${post.title}</strong>
-                <span style="cursor:pointer;" onclick="showView('user-profile', '${post.author}')">👤 ${post.author}</span>
+                <span style="cursor:pointer;" onclick="showView('user-profile', '${post.author}')"><i class="fa-solid fa-circle-user"></i> ${post.author}</span>
               </div>
             </div>`;
         });
@@ -313,7 +315,7 @@
           <div class="post-carousel">
             <img id="carousel-img" src="${post.images && post.images.length > 0 ? post.images[0] : 'https://via.placeholder.com/400x300?text=Reposteria'}">
             <div class="like-btn-floating" onclick="toggleLike('${post.id}')">
-              ${currentUser.likedPosts.includes(post.id) ? '❤️' : '🤍'}
+              ${currentUser.likedPosts.includes(post.id) ? '<i class="fa-solid fa-heart" style="color: #e74c3c;"></i>' : '<i class="fa-regular fa-heart" style="color: #666;"></i>'}
             </div>
           </div>
           <div class="post-info-panel">
@@ -321,7 +323,7 @@
             
             <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; background:#fbe3c7; padding:10px; border-radius:10px;">
               <div style="display:flex; align-items:center; gap:8px; cursor:pointer;" onclick="showView('user-profile', '${post.author}')">
-                <span style="font-size:1.5rem;">👤</span>
+                <span style="font-size:1.5rem;"><i class="fa-solid fa-circle-user"></i></span>
                 <div>
                   <strong>${post.author}</strong><br>
                   <small style="color:#666;">Creador</small>
@@ -332,10 +334,10 @@
 
             <!-- DONACIÓN DE CEREZAS COINS -->
             <div style="display:flex; gap:8px; align-items:center;">
-              <span>🍒</span>
+              <span><i class="fa-solid fa-apple-whole" style="color: #ff4d4d;"></i></span>
               <input type="number" id="donate-coins-input" value="10" min="1" style="width:70px; padding:6px; border-radius:6px; border:1px solid #ccc;">
-              <button class="btn" onclick="donateCoinsToPost('${post.author}')">✈️ Donar</button>
-              <button class="btn btn-danger" style="margin-left:auto;" onclick="reportPost('${post.id}')">Reportar</button>
+              <button class="btn" onclick="donateCoinsToPost('${post.author}')"><i class="fa-solid fa-paper-plane"></i> Donar</button>
+              <button class="btn btn-danger" style="margin-left:auto;" onclick="reportPost('${post.id}')"><i class="fa-solid fa-flag"></i> Reportar</button>
             </div>
           </div>
         </div>
@@ -348,7 +350,7 @@
           </div>
           <div style="display:flex; gap:10px; margin-top:10px;">
             <input type="text" id="comment-input" class="input-field" placeholder="Escribe un comentario..." style="margin:0;">
-            <button class="btn" onclick="addComment('${post.id}')">✈</button>
+            <button class="btn" onclick="addComment('${post.id}')"><i class="fa-solid fa-paper-plane"></i></button>
           </div>
         </div>
       `;
@@ -433,14 +435,14 @@
       container.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <h2>Perfil de ${targetUsername}</h2>
-          <button class="btn btn-danger" onclick="reportUser('${targetUsername}')">🚩 Reportar Perfil</button>
+          <button class="btn btn-danger" onclick="reportUser('${targetUsername}')"><i class="fa-solid fa-flag"></i> Reportar Perfil</button>
         </div>
         <div style="background:#ffedd8; padding:15px; border-radius:10px; margin:15px 0; display:flex; gap:15px; align-items:center;">
-          <div style="font-size:3rem;">👤</div>
+          <div style="font-size:3rem;"><i class="fa-solid fa-circle-user"></i></div>
           <div>
             <h3>${targetUsername}</h3>
             <p>Seguidores: ${targetUsername === currentUser.username ? 10 : 1} | Publicaciones: ${userPosts.length}</p>
-            <p style="font-weight:bold; color:var(--primary-orange); margin-top:4px;">🍒 Saldo de Cereza Coins: ${targetCoins}</p>
+            <p style="font-weight:bold; color:var(--primary-orange); margin-top:4px;"><i class="fa-solid fa-apple-whole" style="color: #ff4d4d;"></i> Saldo de Cereza Coins: ${targetCoins}</p>
           </div>
           <button class="btn btn-follow" style="margin-left:auto;" onclick="toggleFollow('${targetUsername}')">
             ${currentUser.following.includes(targetUsername) ? 'Siguiendo' : 'Seguir'}
@@ -569,7 +571,7 @@
         <div class="card" style="max-width:500px; margin-top:15px;">
           <div style="position:relative; width:100%; height:120px; background:#e2d2c0; border-radius:8px; overflow:hidden; background-size:cover; background-position:center; ${currentUser.coverPic ? `background-image:url('${currentUser.coverPic}')` : ''}">
             <div style="position:absolute; bottom:10px; left:10px; width:60px; height:60px; border-radius:50%; border:2px solid white; background:#fff; overflow:hidden; display:flex; align-items:center; justify-content:center;">
-              ${currentUser.profilePic ? `<img src="${currentUser.profilePic}" style="width:100%; height:100%; object-fit:cover;">` : '<span style="font-size:2rem;">👤</span>'}
+              ${currentUser.profilePic ? `<img src="${currentUser.profilePic}" style="width:100%; height:100%; object-fit:cover;">` : '<span style="font-size:2rem;"><i class="fa-solid fa-circle-user"></i></span>'}
             </div>
           </div>
 
@@ -677,9 +679,9 @@
       container.innerHTML = `
         <h2>Accesorios de Perfil</h2>
         <div class="grid">
-          <div class="card" style="text-align:center;"><h3>Modo pan</h3><p>150 🍒</p><button class="btn" onclick="buyAcc(150, 'Modo pan')">Comprar</button></div>
-          <div class="card" style="text-align:center;"><h3>Cup cake</h3><p>220 🍒</p><button class="btn" onclick="buyAcc(220, 'Cup cake')">Comprar</button></div>
-          <div class="card" style="text-align:center;"><h3>Cereza</h3><p>280 🍒</p><button class="btn" onclick="buyAcc(280, 'Cereza')">Comprar</button></div>
+          <div class="card" style="text-align:center;"><h3>Modo pan</h3><p>150 <i class="fa-solid fa-apple-whole" style="color: #ff4d4d;"></i></p><button class="btn" onclick="buyAcc(150, 'Modo pan')">Comprar</button></div>
+          <div class="card" style="text-align:center;"><h3>Cup cake</h3><p>220 <i class="fa-solid fa-apple-whole" style="color: #ff4d4d;"></i></p><button class="btn" onclick="buyAcc(220, 'Cup cake')">Comprar</button></div>
+          <div class="card" style="text-align:center;"><h3>Cereza</h3><p>280 <i class="fa-solid fa-apple-whole" style="color: #ff4d4d;"></i></p><button class="btn" onclick="buyAcc(280, 'Cereza')">Comprar</button></div>
         </div>
       `;
     }
@@ -689,37 +691,7 @@
       currentUser.coins -= cost;
       currentUser.accessory = name;
       saveUserData();
-      alert(`¡Accesorio ${name} comprado e instalado!`);
-    }
-
-    function renderDonations(container) {
-      container.innerHTML = `
-        <h2>DONACIONES</h2>
-        <div class="card" style="max-width:550px;">
-          <p>¿Deseas apoyar al mantenimiento de la plataforma Baking's Corner?</p>
-          <div style="background:var(--purple-yape); color:white; padding:15px; border-radius:10px; margin-top:15px; text-align:center; font-weight:bold;">
-            Paga aquí con Yape: 922409554
-          </div>
-        </div>
-      `;
-    }
-
-    function renderFollowing(container) {
-      container.innerHTML = `
-        <h2>Creadores que sigues</h2>
-        <ul style="margin-top:15px; padding-left:20px;">
-          ${currentUser.following.length === 0 ? '<p>No sigues a ningún creador aún.</p>' : currentUser.following.map(u => `<li style="margin-bottom:8px; cursor:pointer;" onclick="showView('user-profile', '${u}')">👤 ${u}</li>`).join('')}
-        </ul>
-      `;
-    }
-
-    function filterPosts() {
-      const q = document.getElementById('search-input').value.toLowerCase();
-      const cards = document.querySelectorAll('#posts-grid .card');
-      cards.forEach(c => {
-        const text = c.innerText.toLowerCase();
-        c.style.display = text.includes(q) ? 'flex' : 'none';
-      });
+      alert(`¡Has comprado el accesorio: ${name}!`);
     }
   </script>
 </body>
